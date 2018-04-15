@@ -1,14 +1,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from Efx import Efx
+from threading import Thread
 import queue
 import os
 import imghdr
-from Efx import Efx
-from threading import Thread
+import cv2
+import re
+import numpy as np
 
 class Ui_MainWindow(object):
     
     def __init__(self):
-        self.imgExts = ['bmp','dib','jpg','jpeg','jpe','jp2','png','pbm','pgm','ppm','sr','ras','tff','tif']    
+        # self.imgExts = ['bmp','dib','jpg','jpeg','jpe','jp2','png','pbm','pgm','ppm','sr','ras','tff','tif']
+        # self.imgExts = ['bmp','jpg','jpeg','png']    
         self.pathQueue = []
         
     def setupUi(self, MainWindow):
@@ -152,42 +156,88 @@ class Ui_MainWindow(object):
             self.pbApply.setEnabled(False) 
 
     def onClicked_SrcPath(self):
-        self.leSrcPath.setText(self.openFolder())
-        self.enableBtnApply()
-
-    def onClicked_DestPath(self):
         path = self.openFolder()
-        self.leDestPath.setText(path)
+        self.leSrcPath.setText(path)
         self.enableBtnApply()
         paths = ""
-        for root,dirs,files in os.walk(path):
+        for root,_,files in os.walk(path):
             for filename in files:
                 x = os.path.join(root,filename)
-                if os.path.isfile(x):
-                    for ext in self.imgExts:
-                        if imghdr.what(x) == ext:
-                            paths += x + '\n'
-                            queue.heappush(self.pathQueue,x)
-                            break
+                if os.path.isfile(x) :
+                    isImg = imghdr.what(x)
+                    if isImg:
+                        paths += x + '\n'
+                        queue.heappush(self.pathQueue,x)                       
+                    else: 
+                        print('Not an image')
         self.plainTextEdit.setPlainText(paths)
 
-    def onClicked_Apply(self):
+    def onClicked_DestPath(self):
+        self.leDestPath.setText(self.openFolder())
+        self.enableBtnApply()
+
+
+    def onClicked_Apply(self):        
+        self.pbStatus.setMaximum(len(self.pathQueue))
+        qtd = 0
+        dest = self.leDestPath.text().replace("\\","/")
         while len(self.pathQueue) > 0:
             path = queue.heappop(self.pathQueue)
-            if self.cbFlipH.isChecked:
-                self.generate_thread(path,0)
-            if self.cbFlipV.isChecked:
-                self.generate_thread(path,1)
-            if self.cbBlur.isChecked:
-                self.generate_thread(path,2)
-            if self.cbGrayScale.isChecked:
-                self.generate_thread(path,3)
+            path = path.replace("\\","/")
+            srcImg = cv2.imread(path)
+        
+            if(srcImg is None):
+                print("Imagem nula:",path)
+            else:
+                name = re.split("\\\\|\/|\.",path)[-2]
+                efx = Efx(srcImg,name)
+                
+                if self.cbFlipH.isChecked():
+                    efx.filpH(dest,name)
+                if self.cbFlipV.isChecked():
+                    efx.filpV(dest,name)
+                if self.cbBlur.isChecked():
+                    efx.blur(dest,name)
+                if self.cbGrayScale.isChecked():
+                    efx.grayScale(dest,name)
+                #brightness
+                efx.filter_brightnes_contrast(dest,name,30,1)
+                efx.filter_brightnes_contrast(dest,name,-30,1)
+                efx.filter_brightnes_contrast(dest,name,50,1)
+                efx.filter_brightnes_contrast(dest,name,-50,1)
+                #contrast
+                efx.filter_brightnes_contrast(dest,name,0,0.8)
+                efx.filter_brightnes_contrast(dest,name,0,1.2)                
+                efx.filter_brightnes_contrast(dest,name,0,0.7)
+                efx.filter_brightnes_contrast(dest,name,0,1.3)
 
+                '''
+                if self.cbFlipH.isChecked:
+                    self.generate_thread(0,efx,dest,name)
+                if self.cbFlipV.isChecked:
+                    self.generate_thread(1,efx,dest,name)
+                if self.cbBlur.isChecked:
+                    self.generate_thread(2,efx,dest,name)
+                if self.cbGrayScale.isChecked:
+                    self.generate_thread(3,efx,dest,name)
+                '''
+            qtd+=1
+            self.pbStatus.setValue(qtd)
+        self.plainTextEdit.setPlainText("Finished")
 
-    def generate_thread(self,src,efx):
-        dest = self.leDestPath.text()
-        efx = Efx(src,dest)
-        th = Thread
+    def generate_thread(self,efxCode,efx,destPath,name):
+
+        if efxCode == 0:
+            th = Thread(target=efx.filpH)
+        elif efxCode == 1:
+            th = Thread(target=efx.filpV)
+        elif efxCode == 2:
+            th = Thread(target=efx.blur)
+        elif efxCode == 3:
+            th = Thread(target=efx.grayScale)
+
+        if efxCode >=0 and efxCode <= 3:
+            th.start()
 
 
 
