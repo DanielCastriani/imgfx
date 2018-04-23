@@ -1,20 +1,14 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'mainWindow.ui'
+#
+# Created by: PyQt5 UI code generator 5.10.1
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-from Efx import Efx
-from threading import Thread
-import queue
-import os
-import imghdr
-import cv2
-import re
-import numpy as np
 
 class Ui_MainWindow(object):
-    
-    def __init__(self):
-        # self.imgExts = ['bmp','dib','jpg','jpeg','jpe','jp2','png','pbm','pgm','ppm','sr','ras','tff','tif']
-        # self.imgExts = ['bmp','jpg','jpeg','png']    
-        self.pathQueue = []
-        
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(821, 600)
@@ -52,18 +46,30 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.line)
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.cbFlipH = QtWidgets.QCheckBox(self.centralwidget)
-        self.cbFlipH.setObjectName("cbFlipH")
-        self.gridLayout_2.addWidget(self.cbFlipH, 0, 1, 1, 1)
         self.cbBlur = QtWidgets.QCheckBox(self.centralwidget)
         self.cbBlur.setObjectName("cbBlur")
         self.gridLayout_2.addWidget(self.cbBlur, 2, 1, 1, 1)
-        self.cbFlipV = QtWidgets.QCheckBox(self.centralwidget)
-        self.cbFlipV.setObjectName("cbFlipV")
-        self.gridLayout_2.addWidget(self.cbFlipV, 1, 1, 1, 1)
         self.cbGrayScale = QtWidgets.QCheckBox(self.centralwidget)
         self.cbGrayScale.setObjectName("cbGrayScale")
         self.gridLayout_2.addWidget(self.cbGrayScale, 3, 1, 1, 1)
+        self.cbFlipV = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbFlipV.setObjectName("cbFlipV")
+        self.gridLayout_2.addWidget(self.cbFlipV, 1, 1, 1, 1)
+        self.cbFlipH = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbFlipH.setObjectName("cbFlipH")
+        self.gridLayout_2.addWidget(self.cbFlipH, 0, 1, 1, 1)
+        self.cbBrightness = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbBrightness.setObjectName("cbBrightness")
+        self.gridLayout_2.addWidget(self.cbBrightness, 0, 2, 1, 1)
+        self.cbContrast = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbContrast.setObjectName("cbContrast")
+        self.gridLayout_2.addWidget(self.cbContrast, 1, 2, 1, 1)
+        self.cbRotationAnt = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbRotationAnt.setObjectName("cbRotationAnt")
+        self.gridLayout_2.addWidget(self.cbRotationAnt, 2, 2, 1, 1)
+        self.cbRotateClockwise = QtWidgets.QCheckBox(self.centralwidget)
+        self.cbRotateClockwise.setObjectName("cbRotateClockwise")
+        self.gridLayout_2.addWidget(self.cbRotateClockwise, 3, 2, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout_2)
         self.pbApply = QtWidgets.QPushButton(self.centralwidget)
         self.pbApply.setObjectName("pbApply")
@@ -104,8 +110,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.setSignals()
-        self.init_frm()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -114,10 +118,14 @@ class Ui_MainWindow(object):
         self.pbOpenSrcFolder.setText(_translate("MainWindow", "Open"))
         self.label_2.setText(_translate("MainWindow", "Dest Folder"))
         self.label.setText(_translate("MainWindow", "Src Folder"))
-        self.cbFlipH.setText(_translate("MainWindow", "Flip Horizontal"))
         self.cbBlur.setText(_translate("MainWindow", "Blur"))
-        self.cbFlipV.setText(_translate("MainWindow", "Flip Verical"))
         self.cbGrayScale.setText(_translate("MainWindow", "Grayscale"))
+        self.cbFlipV.setText(_translate("MainWindow", "Flip Verical"))
+        self.cbFlipH.setText(_translate("MainWindow", "Flip Horizontal"))
+        self.cbBrightness.setText(_translate("MainWindow", "Brightness"))
+        self.cbContrast.setText(_translate("MainWindow", "Contrast"))
+        self.cbRotationAnt.setText(_translate("MainWindow", "Rotation -"))
+        self.cbRotateClockwise.setText(_translate("MainWindow", "Rotation +"))
         self.pbApply.setText(_translate("MainWindow", "Apply"))
         self.lbQtdImages.setText(_translate("MainWindow", "0 Images"))
         self.menuFIles.setTitle(_translate("MainWindow", "Files"))
@@ -125,120 +133,6 @@ class Ui_MainWindow(object):
         self.actionInput_Path.setText(_translate("MainWindow", "Input Path"))
         self.actionOutput_Path.setText(_translate("MainWindow", "Output Path"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-
-    def setSignals(self):
-        self.pbApply.clicked.connect(self.onClicked_Apply)
-        self.pbOpenSrcFolder.clicked.connect(self.onClicked_SrcPath)
-        self.pbOpenDestFolder.clicked.connect(self.onClicked_DestPath)
-
-    def openFolder(self):
-        dialog = QtWidgets.QFileDialog()
-        dialog.setFileMode(QtWidgets.QFileDialog.FileMode())
-        dir = dialog.getExistingDirectory(None,'Open a folder')
-        return dir
-
-    def init_frm(self):
-        self.pbApply.setEnabled(False)
-        self.pbStatus.setValue(100)
-
-    
-    def setEnableCtrs(self,enable):
-        self.pbApply.setEnabled(enable)
-        self.pbOpenSrcFolder.setEnabled(enable)
-        self.pbOpenDestFolder.setEnabled(enable)
-
-    def enableBtnApply(self):
-        srcPath = self.leSrcPath.text()
-        destPath = self.leDestPath.text()
-        if len(srcPath) > 0 and len(destPath) > 0:
-            self.pbApply.setEnabled(True)        
-        else:
-            self.pbApply.setEnabled(False) 
-
-    def onClicked_SrcPath(self):
-        path = self.openFolder()
-        self.leSrcPath.setText(path)
-        self.enableBtnApply()
-        paths = ""
-        for root,_,files in os.walk(path):
-            for filename in files:
-                x = os.path.join(root,filename)
-                if os.path.isfile(x) :
-                    isImg = imghdr.what(x)
-                    if isImg:
-                        paths += x + '\n'
-                        queue.heappush(self.pathQueue,x)                       
-                    else: 
-                        print('Not an image')
-        self.plainTextEdit.setPlainText(paths)
-
-    def onClicked_DestPath(self):
-        self.leDestPath.setText(self.openFolder())
-        self.enableBtnApply()
-
-
-    def onClicked_Apply(self):        
-        self.pbStatus.setMaximum(len(self.pathQueue))
-        qtd = 0
-        dest = self.leDestPath.text().replace("\\","/")
-        while len(self.pathQueue) > 0:
-            path = queue.heappop(self.pathQueue)
-            path = path.replace("\\","/")
-            srcImg = cv2.imread(path)
-        
-            if(srcImg is None):
-                print("Imagem nula:",path)
-            else:
-                name = re.split("\\\\|\/|\.",path)[-2]
-                efx = Efx(srcImg,name)
-                
-                if self.cbFlipH.isChecked():
-                    efx.filpH(dest,name)
-                if self.cbFlipV.isChecked():
-                    efx.filpV(dest,name)
-                if self.cbBlur.isChecked():
-                    efx.blur(dest,name)
-                if self.cbGrayScale.isChecked():
-                    efx.grayScale(dest,name)
-                #brightness
-                efx.filter_brightnes_contrast(dest,name,30,1)
-                efx.filter_brightnes_contrast(dest,name,-30,1)
-                efx.filter_brightnes_contrast(dest,name,50,1)
-                efx.filter_brightnes_contrast(dest,name,-50,1)
-                #contrast
-                efx.filter_brightnes_contrast(dest,name,0,0.8)
-                efx.filter_brightnes_contrast(dest,name,0,1.2)                
-                efx.filter_brightnes_contrast(dest,name,0,0.7)
-                efx.filter_brightnes_contrast(dest,name,0,1.3)
-
-                '''
-                if self.cbFlipH.isChecked:
-                    self.generate_thread(0,efx,dest,name)
-                if self.cbFlipV.isChecked:
-                    self.generate_thread(1,efx,dest,name)
-                if self.cbBlur.isChecked:
-                    self.generate_thread(2,efx,dest,name)
-                if self.cbGrayScale.isChecked:
-                    self.generate_thread(3,efx,dest,name)
-                '''
-            qtd+=1
-            self.pbStatus.setValue(qtd)
-        self.plainTextEdit.setPlainText("Finished")
-
-    def generate_thread(self,efxCode,efx,destPath,name):
-
-        if efxCode == 0:
-            th = Thread(target=efx.filpH)
-        elif efxCode == 1:
-            th = Thread(target=efx.filpV)
-        elif efxCode == 2:
-            th = Thread(target=efx.blur)
-        elif efxCode == 3:
-            th = Thread(target=efx.grayScale)
-
-        if efxCode >=0 and efxCode <= 3:
-            th.start()
-
 
 
 if __name__ == "__main__":
@@ -249,3 +143,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+
