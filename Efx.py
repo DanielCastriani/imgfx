@@ -27,3 +27,5 @@ class Efx:
         hsv = cv2.addWeighted(self.imgSrc,contrast,np.zeros(self.imgSrc.shape,self.imgSrc.dtype),0,brightness)
         t = " [Brightness,Contrast] [" + str(brightness)+ "," + str(contrast) + "]"
         cv2.imwrite(destPath+"/" + name + " " + t + "_.png",hsv)
+
+    
