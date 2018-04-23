@@ -23,7 +23,7 @@ class Efx:
         cv2.imwrite(destPath+"/"+ name+ "_blur.png",destImg)
 
     def filter_brightnes_contrast(self,destPath,name,brightness,contrast):
-        #value g(x) = contrast*f(x) + brightness
+        """g(x) = contrast*f(x) + brightness"""
         hsv = cv2.addWeighted(self.imgSrc,contrast,np.zeros(self.imgSrc.shape,self.imgSrc.dtype),0,brightness)
         t = " [Brightness,Contrast] [" + str(brightness)+ "," + str(contrast) + "]"
         cv2.imwrite(destPath+"/" + name + " " + t + "_.png",hsv)

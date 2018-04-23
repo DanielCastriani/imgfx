@@ -70,17 +70,17 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="cbFlipH">
-        <property name="text">
-         <string>Flip Horizontal</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
        <widget class="QCheckBox" name="cbBlur">
         <property name="text">
          <string>Blur</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="cbGrayScale">
+        <property name="text">
+         <string>Grayscale</string>
         </property>
        </widget>
       </item>
@@ -91,10 +91,38 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QCheckBox" name="cbGrayScale">
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="cbFlipH">
         <property name="text">
-         <string>Grayscale</string>
+         <string>Flip Horizontal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="cbBrightness">
+        <property name="text">
+         <string>Brightness</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="cbContrast">
+        <property name="text">
+         <string>Contrast</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QCheckBox" name="cbRotationAnt">
+        <property name="text">
+         <string>Rotation -</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QCheckBox" name="cbRotateClockwise">
+        <property name="text">
+         <string>Rotation +</string>
         </property>
        </widget>
       </item>
