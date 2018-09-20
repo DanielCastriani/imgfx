@@ -104,27 +104,28 @@ class MainWindowController(object):
                     efx.filter_brightnes_contrast(dest,name,-30,1)
                     efx.filter_brightnes_contrast(dest,name,50,1)
                     efx.filter_brightnes_contrast(dest,name,-50,1)
-                    efx.filter_brightnes_contrast(dest,name,80,1)
-                    efx.filter_brightnes_contrast(dest,name,-80,1)
 
                 if self.ui.cbContrast.isChecked():
                     efx.filter_brightnes_contrast(dest,name,0,0.6)
                     efx.filter_brightnes_contrast(dest,name,0,0.7)
                     efx.filter_brightnes_contrast(dest,name,0,0.8)
                     efx.filter_brightnes_contrast(dest,name,0,1.2)
-                    efx.filter_brightnes_contrast(dest,name,0,1.3)
-                    efx.filter_brightnes_contrast(dest,name,0,1.4)
 
                 if self.ui.cbRotationAnt.isChecked():
-                    efx.rotate(dest,name,-10)
-                    efx.rotate(dest,name,-15)
+                    efx.rotate(dest,name,-2)
+                    efx.rotate(dest,name,-3)
+                    efx.rotate(dest,name,-5)
+                    efx.rotate(dest,name,-7)
 
                 if self.ui.cbRotationAnt.isChecked():
-                    efx.rotate(dest,name,10)
-                    efx.rotate(dest,name,15)
+                    efx.rotate(dest,name,2)
+                    efx.rotate(dest,name,3)
+                    efx.rotate(dest,name,5)
+                    efx.rotate(dest,name,7)
 
             qtd+=1
             self.ui.pbStatus.setValue(qtd)
+            self.ui.lbQtdImages.setText("{} Imagens".format(qtd))
         self.ui.plainTextEdit.setPlainText("Finished")
 
 if __name__ == "__main__":

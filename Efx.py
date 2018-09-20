@@ -26,7 +26,7 @@ class Efx:
     def filter_brightnes_contrast(self,destPath,name,brightness,contrast):
         """g(x) = contrast*f(x) + brightness"""
         hsv = cv2.addWeighted(self.imgSrc,contrast,np.zeros(self.imgSrc.shape,self.imgSrc.dtype),0,brightness)
-        t = "[Brightness,Contrast] [" + str(brightness)+ "," + str(contrast) + "]"
+        t = "[Brightness,Contrast]_[" + str(brightness)+ "," + str(contrast) + "]"
         # cv2.imwrite(destPath+"/" + name + t + ".png",hsv)
         self.save(hsv,destPath,name,t)
 
@@ -37,4 +37,4 @@ class Efx:
         self.save(destImg,destPath,name,"rotate[" + str(angle) +"]")
 
     def save(self,img,dest,name,opr):
-        cv2.imwrite(dest+"/"+ name + " _" + opr + ".png",img) 
+        cv2.imwrite(dest+"/"+ name + "_" + opr + ".png",img) 
