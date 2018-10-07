@@ -101,27 +101,28 @@ class MainWindowController(object):
 
                 if self.ui.cbBrightness.isChecked():
                     efx.filter_brightnes_contrast(dest,name,30,1)
-                    efx.filter_brightnes_contrast(dest,name,-30,1)
-                    efx.filter_brightnes_contrast(dest,name,50,1)
+                    #efx.filter_brightnes_contrast(dest,name,-30,1)
+                    #efx.filter_brightnes_contrast(dest,name,50,1)
                     efx.filter_brightnes_contrast(dest,name,-50,1)
 
                 if self.ui.cbContrast.isChecked():
-                    efx.filter_brightnes_contrast(dest,name,0,0.6)
-                    efx.filter_brightnes_contrast(dest,name,0,0.7)
-                    efx.filter_brightnes_contrast(dest,name,0,0.8)
+                    #efx.filter_brightnes_contrast(dest,name,0,0.6)
+                    #efx.filter_brightnes_contrast(dest,name,0,0.7)
+                    #efx.filter_brightnes_contrast(dest,name,0,0.8)
                     efx.filter_brightnes_contrast(dest,name,0,1.2)
+                    pass
 
                 if self.ui.cbRotationAnt.isChecked():
                     efx.rotate(dest,name,-2)
                     efx.rotate(dest,name,-3)
-                    efx.rotate(dest,name,-5)
-                    efx.rotate(dest,name,-7)
+                    #efx.rotate(dest,name,-5)
+                    #efx.rotate(dest,name,-7)
 
                 if self.ui.cbRotationAnt.isChecked():
                     efx.rotate(dest,name,2)
                     efx.rotate(dest,name,3)
-                    efx.rotate(dest,name,5)
-                    efx.rotate(dest,name,7)
+                    #efx.rotate(dest,name,5)
+                    #efx.rotate(dest,name,7)
 
             qtd+=1
             self.ui.pbStatus.setValue(qtd)
