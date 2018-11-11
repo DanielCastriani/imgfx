@@ -1,6 +1,4 @@
-# pylint: disable=E1101
 from PyQt5 import QtCore, QtGui, QtWidgets
-from threading import Thread
 from Efx import Efx
 from UI.mainWindow import Ui_MainWindow
 import queue
@@ -8,8 +6,8 @@ import os
 import imghdr
 import cv2
 import re
-import sys,time
-import numpy as np
+import sys
+
 
 class MainWindowController(object):
     def __init__(self):
@@ -81,8 +79,6 @@ class MainWindowController(object):
             if(srcImg is None):
                 print("Imagem nula:",path)
             else:
-                #name = re.split("\\\\|\/|\.",path)[-2]               
-
                 aux_name = re.split('\/',path)[-1]
                 name = ''
                 for i in range(len(aux_name) - 4):
@@ -113,13 +109,13 @@ class MainWindowController(object):
                     pass
 
                 if self.ui.cbRotationAnt.isChecked():
-                    efx.rotate(dest,name,-2)
+                    #efx.rotate(dest,name,-2)
                     efx.rotate(dest,name,-3)
                     #efx.rotate(dest,name,-5)
                     #efx.rotate(dest,name,-7)
 
                 if self.ui.cbRotationAnt.isChecked():
-                    efx.rotate(dest,name,2)
+                    #efx.rotate(dest,name,2)
                     efx.rotate(dest,name,3)
                     #efx.rotate(dest,name,5)
                     #efx.rotate(dest,name,7)
