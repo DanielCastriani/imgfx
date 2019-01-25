@@ -109,16 +109,16 @@ class MainWindowController(object):
                     pass
 
                 if self.ui.cbRotationAnt.isChecked():
-                    #efx.rotate(dest,name,-2)
+                    efx.rotate(dest,name,-2)
                     efx.rotate(dest,name,-3)
-                    #efx.rotate(dest,name,-5)
-                    #efx.rotate(dest,name,-7)
+                    efx.rotate(dest,name,-5)
+                    efx.rotate(dest,name,-7)
 
                 if self.ui.cbRotationAnt.isChecked():
-                    #efx.rotate(dest,name,2)
+                    efx.rotate(dest,name,2)
                     efx.rotate(dest,name,3)
-                    #efx.rotate(dest,name,5)
-                    #efx.rotate(dest,name,7)
+                    efx.rotate(dest,name,5)
+                    efx.rotate(dest,name,7)
 
             qtd+=1
             self.ui.pbStatus.setValue(qtd)
