@@ -7,14 +7,14 @@ Libs
 
 Instalar libs:
 
-```
+```bash
 > pip install PyQt5
 > pip install opencv-python
 ```
 
 Executar
 
-```
+```bash
 > python mainWindowController.py
 ```
 
@@ -29,9 +29,7 @@ Executar
 
 <p> Para gerar os datasets de detecção e classificação de placas de trânsito, foi utilizado Rotation -, e Rotation +</p>
 
-![Passos](./.readme/Passo1.png)
-
-Apos esse processo, as imagens serão geradas.
+![Passos](https://github.com/DanielCastriani/imgfx/blob/master/.readme/passo1.png)
 
 # Anotações do dataset de detecção
 https://github.com/DanielCastriani/Dataset-Annotations-Generator
